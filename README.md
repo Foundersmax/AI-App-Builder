@@ -1,11 +1,28 @@
-<div align="center">
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+# Lumina Site Builder Deployment Guide
 
-  <h1>Built with AI Studio</h2>
+## 1. MongoDB Atlas (Database)
+- Create a free cluster at [mongodb.com](https://www.mongodb.com/cloud/atlas).
+- Get your connection string (e.g., `mongodb+srv://user:pass@cluster...`).
+- Allow IP `0.0.0.0/0` in Network Access for Render.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## 2. Render (Backend)
+- Connect your GitHub repo.
+- Select `Node` as runtime.
+- Build command: `npm install` (if you have a package.json) or just ensure `server.js` exists.
+- Environment Variables:
+  - `API_KEY`: Your Gemini 3 Pro Key.
+  - `MONGODB_URI`: Your Atlas string.
+  - `PORT`: 5000
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
-
-</div>
+## 3. Vercel (Frontend)
+- Connect repo.
+- Framework: Create React App (or Vite).
+- Add a `vercel.json` if you need to proxy `/api` to your Render URL:
+```json
+{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://your-render-url.onrender.com/api/:path*" }
+  ]
+}
+```
